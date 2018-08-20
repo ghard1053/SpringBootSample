@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 import org.hibernate.validator.constraints.*;
 import org.hibernate.validator.constraints.Email;
@@ -16,6 +18,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="mydata")
+@NamedQueries({
+  @NamedQuery(
+    name="findWithName",
+    query="from MyData where name like :fname"
+  ),
+  @NamedQuery(
+    name="findByAge",
+    query="from MyData where age > :min and age < :max"
+  )
+})
 public class MyData {
 
   @Id
@@ -25,19 +37,20 @@ public class MyData {
   private long id;
 
   @Column(length = 50, nullable = false)
-  @NotEmpty(message="空白は不可") // String は NotNullではなくNotEmpty nullではなく空文字なので
+  @NotEmpty // String は NotNullではなくNotEmpty nullではなく空文字なので
   private String name;
   
   @Column(length = 200, nullable = true)
-  @Email(message="メールアドレスのみ")
+  @Email
   private String mail;
   
   @Column(nullable = true)
-  @Min(value=0, message="0以上")
-  @Max(value=200, message="200以下")
+  @Min(value=0)
+  @Max(value=200)
   private Integer age;
   
   @Column(nullable = true)
+  @Phone // onlyNumber = true
   private String memo;
 
   // ---------------------------------------------

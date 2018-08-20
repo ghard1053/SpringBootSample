@@ -21,7 +21,7 @@
   <h1 th:text="#{content.title}">Hello page</h1>
   <p th:text="${msg}"></p>
   
-  <table>
+<!--   <table>
     <form method="post" action="/" th:object="${formModel}">
       <tr>
         <td><label for="name">名前</label></td>
@@ -43,20 +43,29 @@
       </tr>
       <tr>
         <td><label for="memo">メモ</label></td>
-        <td><textarea name="memo" th:text="*{memo}" cols="20" rows="5"></textarea></td>
+        <td><textarea name="memo" th:text="*{memo}" th:errorclass="err" cols="20" rows="5"></textarea>
+          <div th:if="${#fields.hasErrors('memo')}" th:errors="*{memo}" th:errorclass="err"></div></td>
       </tr>
       <tr><td></td><td><input type="submit" /></td></tr>
     </form>
   </table>
-  <hr/>
+  <hr/> -->
+  
+  
   <table>
     <tr>
       <th>ID</th>
       <th>名前</th>
+      <th>メール</th>
+      <th>年齢</th>
+      <th>メモ（tel）</th>
     </tr>
     <tr th:each="obj : ${datalist}">
       <td th:text="${obj.id}"></td>
       <td th:text="${obj.name}"></td>
+      <td th:text="${obj.mail}"></td>
+      <td th:text="${obj.age}"></td>
+      <td th:text="${obj.memo}"></td>
     </tr>
   </table>
 

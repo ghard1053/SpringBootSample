@@ -16,7 +16,11 @@ import org.springframework.validation.annotation.Validated;
 
 import com.example.springboot.repositories.MyDataRepository;
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Optional;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class HelloController {
@@ -24,14 +28,22 @@ public class HelloController {
   @Autowired
   MyDataRepository repository;
   
+  @PersistenceContext
+  EntityManager entityManager;
+  
+  MyDataDaoImpl dao;
+  
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public ModelAndView index(
       @ModelAttribute("formModel") MyData mydata,
       ModelAndView mav) {
     mav.setViewName("index");
-    mav.addObject("msg", "this is sample content.");
+    
+    mav.addObject("msg", "this is sample MyData.");
     mav.addObject("formModel", mydata);
-    Iterable<MyData> list = repository.findAll();
+    //Iterable<MyData> list = repository.findAll();
+    //Iterable<MyData> list = dao.getAll();
+    Iterable<MyData> list = repository.findAllOrderByName();
     mav.addObject("datalist", list);
     return mav;
   }
@@ -95,31 +107,62 @@ public class HelloController {
       ModelAndView mav) {
     repository.deleteById(id);
 	return new ModelAndView("redirect:/");
-  }  
+  }
   
+  @RequestMapping(value = "/find", method = RequestMethod.GET)
+  public ModelAndView find(ModelAndView mav) {
+    mav.setViewName("find");
+    mav.addObject("title", "Find page");
+    mav.addObject("msg", "MyDataのサンプルです");
+    mav.addObject("value", "");
+    Iterable<MyData> list = dao.getAll();
+    mav.addObject("datalist", list);
+    return mav;
+  }
+  
+  @RequestMapping(value = "/find", method = RequestMethod.POST)
+  public ModelAndView search(
+      HttpServletRequest request,
+      ModelAndView mav) {
+    mav.setViewName("find");
+    String param = request.getParameter("fstr");
+    if (param == "") {
+      mav = new ModelAndView("redirect:/find");
+    } else {
+      mav.addObject("title", "Find result");
+      mav.addObject("msg","「" + param + "」の検索結果");
+        mav.addObject("value", param);
+        List<MyData> list = dao.find(param);
+        mav.addObject("datalist", list);      
+    }
+    return mav;
+  }  
+
   
   @PostConstruct
   public void init() {
   	
+	dao = new MyDataDaoImpl(entityManager);
+	  
   	MyData d1 = new MyData();
   	d1.setName("tomoya");
   	d1.setAge(123);
   	d1.setMail("tomoya@gmail.com");
-  	d1.setMemo("this is my data!");
+  	d1.setMemo("090-999-999");
   	repository.saveAndFlush(d1);
   	
   	MyData d2 = new MyData();
   	d2.setName("daisuke");
   	d2.setAge(24);
   	d2.setMail("daisuke@gmail.com");
-  	d2.setMemo("yeaaaaaaa!!!");
+  	d2.setMemo("05-241-4211");
   	repository.saveAndFlush(d2);
   	
   	MyData d3 = new MyData();
   	d3.setName("take");
   	d3.setAge(41);
   	d3.setMail("tttttake@gmail.com");
-  	d3.setMemo("my friend");
+  	d3.setMemo("0120-444-444");
   	repository.saveAndFlush(d3);
   	
   }
