@@ -12,6 +12,10 @@ import javax.validation.constraints.NotNull;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+
 import org.hibernate.validator.constraints.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -52,6 +56,10 @@ public class MyData {
   @Column(nullable = true)
   @Phone // onlyNumber = true
   private String memo;
+  
+  @OneToMany(cascade = CascadeType.ALL)
+  @Column(nullable = true)
+  private List<MsgData> msgdatas;
 
   // ---------------------------------------------
   
@@ -88,6 +96,13 @@ public class MyData {
   }
   public void setMemo(String memo) {
 	this.memo = memo;
+  }
+  
+  public List<MsgData> getMsgdatas() {
+	return msgdatas;
+  }
+  public void setMsgdatas(List<MsgData> msgdatas) {
+	this.msgdatas = msgdatas;
   }
 	
 }
