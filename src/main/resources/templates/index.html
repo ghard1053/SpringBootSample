@@ -4,6 +4,9 @@
   <title>top page</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
   <style>
     h1 { font-size:18px; font-weight:bold; color:gray; }
     body { font-size:13pt; color:gray; margin:5px 25px; }
@@ -20,6 +23,7 @@
 
   <h1 th:text="#{content.title}">Hello page</h1>
   <p th:text="${msg}"></p>
+  <ol id="obj"></ol>
   
 <!--   <table>
     <form method="post" action="/" th:object="${formModel}">
@@ -68,6 +72,12 @@
       <td th:text="${obj.memo}"></td>
     </tr>
   </table>
+
+  <div>
+  	<a my:mypage="${datalist.getNumber() - 1}">&lt;&lt;prev</a>
+  	|
+   	<a my:mypage="${datalist.getNumber() + 1}">next&gt;&gt;</a>
+  </div>
 
 <!--   <div th:include="part :: frag_body">
     <p>this is original content.</p>

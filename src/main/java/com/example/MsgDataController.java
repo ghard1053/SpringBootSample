@@ -25,7 +25,7 @@ public class MsgDataController {
 	@Autowired
 	MsgDataRepository repository;
 	
-	@PersistenceContext
+	//@PersistenceContext
 	EntityManager entityManager;
 	
 	MsgDataDaoImpl dao;
@@ -54,6 +54,8 @@ public class MsgDataController {
 			return mav;
 		} else {
 			repository.saveAndFlush(msgdata);
+			//System.out.println("noerror"
+			//		+ "--------------------------------------------------");
 			return new ModelAndView("redirect:/msg");
 		}
 	}
